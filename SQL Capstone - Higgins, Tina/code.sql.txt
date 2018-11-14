@@ -1,0 +1,298 @@
+**PART I**
+
+Select all columns from the first 10 rows. What columns does the table have?
+
+SELECT *
+ FROM survey
+ LIMIT 10;
+________________
+
+Create a quiz funnel using the GROUP BY command. What is the number of responses for each question?
+
+SELECT question, COUNT(DISTINCT user_id) AS 'User Count'
+ FROM survey
+ GROUP BY 1;
+ 
+________________
+**PART II**
+
+Examine the first five rows of each table. What are the column names?
+
+SELECT *
+ FROM quiz
+ LIMIT 5;
+ 
+ SELECT *
+ FROM home_try_on
+ LIMIT 5;
+ 
+ SELECT *
+ FROM purchase
+ LIMIT 5;
+
+________________
+create a new table
+
+SELECT DISTINCT q.user_id, 
+   h.user_id IS NOT NULL AS 'is_home_try_on',
+   h.number_of_pairs,
+   p.user_id IS NOT NULL AS 'is_purchase'
+FROM quiz q
+LEFT JOIN home_try_on h
+   ON q.user_id = h.user_id
+LEFT JOIN purchase p
+   ON p.user_id = q.user_id
+LIMIT 10;
+
+IN ORDER TO FIND HOW MANY PEOPLE COMPLETED A PURCHASE WHO TRIED 3 GLASSES AT HOME, I USED THIS QUERY:
+
+WITH funnels AS (SELECT DISTINCT q.user_id,
+   h.user_id IS NOT NULL AS 'is_home_try_on',
+   h.number_of_pairs,
+   p.user_id IS NOT NULL AS 'is_purchase'
+FROM quiz q
+LEFT JOIN home_try_on h
+   ON q.user_id = h.user_id
+LEFT JOIN purchase p
+   ON p.user_id = q.user_id)
+SELECT number_of_pairs, SUM(is_purchase) AS 'Purchased'
+FROM funnels
+WHERE number_of_pairs = '3 pairs';
+
+
+IN ORDER TO FIND HOW MANY PEOPLE COMPLETED A PURCHASE WHO TRIED 5 GLASSES AT HOME, I USED THIS QUERY:
+
+WITH funnels AS (SELECT DISTINCT q.user_id,
+   h.user_id IS NOT NULL AS 'is_home_try_on',
+   h.number_of_pairs,
+   p.user_id IS NOT NULL AS 'is_purchase'
+FROM quiz q
+LEFT JOIN home_try_on h
+   ON q.user_id = h.user_id
+LEFT JOIN purchase p
+   ON p.user_id = q.user_id)
+SELECT number_of_pairs, SUM(is_purchase) AS 'Purchased'
+FROM funnels
+WHERE number_of_pairs = '5 pairs';
+
+________________
+PART 3
+
+--Calculating the most popular STYLES:--
+
+SELECT DISTINCT(style)
+FROM quiz;
+
+SELECT style, COUNT(*) AS 'count'
+FROM quiz
+WHERE Style = "Women's Styles";
+
+SELECT style, COUNT(*) AS 'count'
+FROM quiz
+WHERE Style = "Men's Styles";
+
+SELECT style, COUNT(*) AS 'count'
+FROM quiz
+WHERE Style = "I'm not sure. Let's skip it.";
+
+
+--Calculating the most popular FIT:--
+
+SELECT DISTINCT(fit)
+FROM quiz;
+
+SELECT fit, COUNT(*) AS 'count'
+FROM quiz
+WHERE fit = "Medium";
+
+SELECT fit, COUNT(*) AS 'count'
+FROM quiz
+WHERE fit = "Narrow";
+
+SELECT fit, COUNT(*) AS 'count'
+FROM quiz
+WHERE fit = "Wide";
+
+SELECT fit, COUNT(*) AS 'count'
+FROM quiz
+WHERE fit = "I'm not sure. Let's skip it.";
+
+
+--Calculating the most popular SHAPE:--
+
+SELECT DISTINCT(shape)
+FROM quiz;
+
+SELECT shape, COUNT(*) AS 'count'
+FROM quiz
+WHERE shape = "Rectangular";
+
+SELECT shape, COUNT(*) AS 'count'
+FROM quiz
+WHERE shape = "Round";
+
+SELECT shape, COUNT(*) AS 'count'
+FROM quiz
+WHERE shape = "Square";
+
+SELECT shape, COUNT(*) AS 'count'
+FROM quiz
+WHERE shape = "No Preference";
+
+
+--Calculating the most popular COLOR:--
+
+SELECT DISTINCT(color)
+FROM quiz;
+
+SELECT color, COUNT(*) AS 'count'
+FROM quiz
+WHERE color = "Tortoise";
+
+SELECT color, COUNT(*) AS 'count'
+FROM quiz
+WHERE color = "Black";
+
+SELECT color, COUNT(*) AS 'count'
+FROM quiz
+WHERE color = "Two-Tone";
+
+SELECT color, COUNT(*) AS 'count'
+FROM quiz
+WHERE color = "Crystal";
+
+SELECT color, COUNT(*) AS 'count'
+FROM quiz
+WHERE color = "Neutral";
+
+--------------------------------
+--The most common purchases made--
+--Calculating the most purchased STYLE--
+
+SELECT DISTINCT(style)
+FROM purchase;
+
+SELECT style, COUNT(*) AS 'count'
+FROM quiz
+WHERE Style = "Women's Styles";
+
+SELECT style, COUNT(*) AS 'count'
+FROM quiz
+WHERE Style = "Men's Styles";
+
+--Calculating the most purchased PRODUCT_ID--
+SELECT DISTINCT(product_id)
+FROM purchase;
+
+SELECT product_id, COUNT(*) AS 'count'
+FROM purchase
+WHERE product_id = "1";
+
+SELECT product_id, COUNT(*) AS 'count'
+FROM purchase
+WHERE product_id = "2";
+SELECT product_id, COUNT(*) AS 'count'
+FROM purchase
+WHERE product_id = "3";
+SELECT product_id, COUNT(*) AS 'count'
+FROM purchase
+WHERE product_id = "4";
+SELECT product_id, COUNT(*) AS 'count'
+FROM purchase
+WHERE product_id = "5";
+SELECT product_id, COUNT(*) AS 'count'
+FROM purchase
+WHERE product_id = "6";
+SELECT product_id, COUNT(*) AS 'count'
+FROM purchase
+WHERE product_id = "7";
+SELECT product_id, COUNT(*) AS 'count'
+FROM purchase
+WHERE product_id = "8";
+SELECT product_id, COUNT(*) AS 'count'
+FROM purchase
+WHERE product_id = "9";
+SELECT product_id, COUNT(*) AS 'count'
+FROM purchase
+WHERE product_id = "10";
+
+--Calculating the most purchased MODEL_NAME--
+SELECT DISTINCT(model_name)
+FROM purchase;
+
+SELECT model_name, COUNT(*) AS 'count'
+FROM purchase
+WHERE model_name = "Lucy";
+
+SELECT model_name, COUNT(*) AS 'count'
+FROM purchase
+WHERE model_name = "Dawes";
+
+SELECT model_name, COUNT(*) AS 'count'
+FROM purchase
+WHERE model_name = "Eugene Narrow";
+
+SELECT model_name, COUNT(*) AS 'count'
+FROM purchase
+WHERE model_name = "Brady";
+
+SELECT model_name, COUNT(*) AS 'count'
+FROM purchase
+WHERE model_name = "Monocle";
+
+SELECT model_name, COUNT(*) AS 'count'
+FROM purchase
+WHERE model_name = "Olive";
+
+
+--Calculating the most purchased COLOR--
+SELECT DISTINCT(color)
+FROM purchase;
+
+SELECT color, COUNT(*) AS 'count'
+FROM purchase
+WHERE color = "Jet Black";
+
+SELECT color, COUNT(*) AS 'count'
+FROM purchase
+WHERE color = "Elderflower Crystal";
+
+SELECT color, COUNT(*) AS 'count'
+FROM purchase
+WHERE color = "Rosewood Tortoise";
+
+SELECT color, COUNT(*) AS 'count'
+FROM purchase
+WHERE color = "Driftwood Fade";
+
+SELECT color, COUNT(*) AS 'count'
+FROM purchase
+WHERE color = "Sea Glass Gray";
+
+SELECT color, COUNT(*) AS 'count'
+FROM purchase
+WHERE color = "Endangered Tortoise";
+
+SELECT color, COUNT(*) AS 'count'
+FROM purchase
+WHERE color = "Layered Tortoise Matte";
+
+SELECT color, COUNT(*) AS 'count'
+FROM purchase
+WHERE color = "Rose Crystal";
+
+SELECT color, COUNT(*) AS 'count'
+FROM purchase
+WHERE color = "Pearled Tortoise";
+
+
+--
+
+SELECT COUNT(DISTINCT user_id) AS 'quiz'
+ FROM quiz;
+ 
+ SELECT COUNT(DISTINCT user_id) AS 'Home Try-On'
+FROM home_try_on;
+
+SELECT COUNT(DISTINCT user_id) AS 'Purchase'
+ FROM purchase;
